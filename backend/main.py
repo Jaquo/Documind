@@ -5,6 +5,9 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 from vector_store.store import LocalVectorStore
 from pydantic import BaseModel, Field
+from llm import generate_answer
+from ollama import ResponseError
+from httpx import RequestError
 
 # Location where our FAISS database will be saved
 STORE_PATH = Path(__file__).resolve().parent / "vector_store"
@@ -179,3 +182,62 @@ def search_document(data: SearchRequest, request: Request):
         "results": results
     }
 
+
+@app.post("/ask")
+def ask_document(data: SearchRequest, request: Request):
+
+    store = request.app.state.vector_store
+
+    if store.index is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Please upload a PDF first."
+        )
+
+    if not data.question.strip():
+        raise HTTPException(
+            status_code=400,
+            detail="Question cannot be empty."
+        )
+
+    # Retrieve relevant passages using FAISS
+    passages = store.search(
+        question=data.question,
+        top_k=data.top_k
+    )
+
+    # Generate an answer using our local AI
+    try:
+        answer = generate_answer(
+            question=data.question,
+            passages=passages
+        )
+
+    except ResponseError as error:
+        raise HTTPException(
+            status_code=502,
+            detail=f"Ollama error: {error.error}"
+        ) from error
+
+    except RequestError as error:
+        raise HTTPException(
+            status_code=503,
+            detail="Cannot connect to Ollama."
+        ) from error
+
+    sources = []
+
+    for i, passage in enumerate(passages, start=1):
+        sources.append({
+            "reference": f"[{i}]",
+            "page_number": passage["page_number"],
+            "text": passage["text"],
+            "similarity_score": passage["similarity_score"]
+        })
+
+    return {
+        "question": data.question,
+        "answer": answer,
+        "model": "qwen2.5:1.5b",
+        "sources": sources
+    }
