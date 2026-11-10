@@ -83,7 +83,6 @@ async def upload_pdf(file: UploadFile = File(...)):
 
     # Split the document into chunks
     chunks = chunk_document(pages)
-
     # Return document information
     
     return {

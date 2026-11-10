@@ -1,5 +1,5 @@
 
-def chunk_document(pages, chunk_size=200, chunk_overlap=40):
+def chunk_document(pages, chunk_size=120, chunk_overlap=25):
 
     chunks = []
 
