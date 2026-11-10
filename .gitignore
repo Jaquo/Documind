@@ -1,0 +1,31 @@
+# Python virtual environment
+/backend/bin/
+/backend/include/
+/backend/lib/
+/backend/lib64
+/backend/share/
+/backend/pyvenv.cfg
+/backend/.venv/
+
+# Python cache
+/.venv*/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Uploaded PDFs
+/backend/uploads/
+*.pdf
+
+# Vector database
+/backend/vector_store/
+
+# React
+/frontend/node_modules/
+/frontend/dist/
