@@ -6,8 +6,15 @@
 /backend/share/
 /backend/pyvenv.cfg
 /backend/.venv/
-/backend/vector_store/index.faiss
-/backend/vector_store/chunks.json
+backend/vector_store/*.faiss
+backend/vector_store/chunks.json
+
+# React dependencies and build output
+frontend/node_modules/
+frontend/dist/
+
+
+.vscode/
 
 # Python cache
 /.venv*/

@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field
 from llm import generate_answer
 from ollama import ResponseError
 from httpx import RequestError
+from fastapi.middleware.cors import CORSMiddleware
 
 # Location where our FAISS database will be saved
 STORE_PATH = Path(__file__).resolve().parent / "vector_store"
@@ -38,6 +39,19 @@ app = FastAPI(
     title="DocuMind API",
     lifespan=lifespan
 )
+
+
+# Allow React to communicate with FastAPI
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173"
+    ],
+    allow_methods=["GET", "POST"],
+    allow_headers=["*"]
+)
+
 
 
 MAX_FILE_SIZE = 10 * 1024 * 1024  # 10 MB
