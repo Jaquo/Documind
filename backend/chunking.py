@@ -6,7 +6,8 @@ def chunk_document(pages, chunk_size=200, chunk_overlap=40):
     # Process each page separately
     for page_number, page_text in enumerate(pages, start=1):
 
-        words = page_text.split()
+        words = page_text.split() #the split() method is used to split the page text into individual words based on whitespace. 
+        #This creates a list of words that can be processed for chunking.
 
         start = 0
         chunk_index = 1
@@ -15,12 +16,14 @@ def chunk_document(pages, chunk_size=200, chunk_overlap=40):
 
             # Calculate where this chunk ends
             end = min(start + chunk_size, len(words))
+            #min() is used to ensure that the end index does not exceed the total number of words in the page.
+            #This prevents an IndexError when trying to access words that don't exist.
 
             # Extract words and combine them into text
             chunk_words = words[start:end]
             chunk_text = " ".join(chunk_words)
 
-            # Store the chunk and its metadata
+            # Store the chunk and its metadata in a dictionary
             chunks.append({
                 "chunk_id": f"page-{page_number}-chunk-{chunk_index}",
                 "page_number": page_number,

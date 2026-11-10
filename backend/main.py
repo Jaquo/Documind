@@ -80,6 +80,10 @@ async def upload_pdf(file: UploadFile = File(...)):
             detail="No readable text found in this PDF."
         )
 
+
+    # Split the document into chunks
+    chunks = chunk_document(pages)
+
     # Return document information
     
     return {
