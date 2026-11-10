@@ -6,6 +6,8 @@
 /backend/share/
 /backend/pyvenv.cfg
 /backend/.venv/
+/backend/vector_store/index.faiss
+/backend/vector_store/chunks.json
 
 # Python cache
 /.venv*/

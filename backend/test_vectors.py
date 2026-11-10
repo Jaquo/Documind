@@ -3,7 +3,7 @@ import sys
 import pymupdf
 
 from chunking import chunk_document
-from vector_store import LocalVectorStore
+from backend.vector_store.vector_store import LocalVectorStore
 
 
 # Get the PDF filename from the command line
